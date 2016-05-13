@@ -2,14 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+   >
 
-    <ImageView
-        android:id="@+id/backgroundImage"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,15 +32,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:layout_gravity="fill_horizontal"
+            >
 
             <ImageView
                 android:id="@+id/image_view_track"
-                android:layout_width="375dp"
+                android:layout_width="match_parent"
                 android:layout_height="375dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/darker_gray" />
+                android:layout_gravity="fill_horizontal"
+
+             />
 
 
         </RelativeLayout>
@@ -56,12 +53,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="@color/colorAccent"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            >
 
             <TextView
                 android:id="@+id/text_view_current_duration"
@@ -72,7 +72,7 @@
 
             <SeekBar
                 android:id="@+id/seek_bar_seekBar"
-                android:layout_width="335dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal" />
 
@@ -86,10 +86,13 @@
 
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            >
 
             <ImageButton
                 android:id="@+id/image_btn_prev"

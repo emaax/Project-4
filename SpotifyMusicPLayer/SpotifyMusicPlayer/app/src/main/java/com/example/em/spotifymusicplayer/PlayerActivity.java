@@ -75,7 +75,6 @@ public class PlayerActivity extends AppCompatActivity implements
         actionBar.setSubtitle((topTrackData).trackAlbum);
 
         setContentView(R.layout.activity_player);
-      /*  buildPlayer();*/
 
         artistNameView = (TextView) findViewById(R.id.text_view_artist_name);
         albumNameView = (TextView) findViewById(R.id.text_view_album_name);
@@ -89,6 +88,7 @@ public class PlayerActivity extends AppCompatActivity implements
         nextButton = (ImageButton) findViewById(R.id.image_btn_next);
         pauseButton = (ImageButton) findViewById(R.id.image_btn_pause);
         setViews();
+        buildPlayer();
 
         // Progress Bar to display loading while everything is being set up
       //  spinner.setVisibility(View.VISIBLE);
@@ -104,27 +104,30 @@ public class PlayerActivity extends AppCompatActivity implements
         prevButton = (ImageButton) findViewById(R.id.image_btn_prev);
         nextButton = (ImageButton) findViewById(R.id.image_btn_next);
         pauseButton = (ImageButton) findViewById(R.id.image_btn_pause);
-        imageUrl = TopTenTracksActivity.topTenTrackList.get(songPosition).trackImageLarge;
-        trackImageView.setImageURI(Uri.parse(imageUrl));
-        trackUrl= TopTenTracksActivity.topTenTrackList.get(songPosition).trackUrl;
+        imageUrl = topTrackData.trackImageLarge;
+        Log.i("PlayerActivity", "setViews: " + imageUrl);
+        Picasso.with(this).load(Uri.parse(imageUrl)).into(trackImageView);
         prevButton();
         nextButton();
 
     }
-       /* public void buildPlayer () {
+       public void buildPlayer () {
             //start a Spotify player
             Config playerConfig = new Config(this, accessToken, CLIENT_ID);
             player = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
                 @Override
                 public void onInitialized(Player p) {
-                    player.addPlayerNotificationCallback(PlayerActivity.this);
-                    player.setPlaybackBitrate(PlaybackBitrate.BITRATE_NORMAL);
-                    player.getPlayerState(new PlayerStateCallback() {
+                    p.addPlayerNotificationCallback(PlayerActivity.this);
+                    p.setPlaybackBitrate(PlaybackBitrate.BITRATE_NORMAL);
+                    prepareMusic();
+
+                    p.getPlayerState(new PlayerStateCallback() {
                         @Override
                         public void onPlayerState(PlayerState playerState) {
                             state = playerState;
                         }
                     });
+                    player = p;
                 }
 
                 @Override
@@ -135,7 +138,7 @@ public class PlayerActivity extends AppCompatActivity implements
         }
 
 
-*/
+
     private void nextButton() {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,19 +163,17 @@ public class PlayerActivity extends AppCompatActivity implements
 
         // disable until prepared
         playButton.setClickable(true);
-        playButton.setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
+        playButton.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
         // get track
-        final String trackUrl = TopTenTracksActivity.topTenTrackList.get(songPosition).trackUrl;
-
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isPlaying) {
-                    mPlayer.resume();
-                    playButton.setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
+                    player.play(topTrackData.trackUrl);
+                    player.resume();
                     isPlaying = true;
 
-                    mPlayer.getPlayerState(new PlayerStateCallback() {
+                    player.getPlayerState(new PlayerStateCallback() {
                         @Override
                         public void onPlayerState(PlayerState playerState) {
                             int progress = playerState.positionInMs;
@@ -202,7 +203,7 @@ public class PlayerActivity extends AppCompatActivity implements
                     });
 
                 } else {
-                    mPlayer.pause();
+                    player.pause();
                     isPlaying = false;
                     playButton.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
 

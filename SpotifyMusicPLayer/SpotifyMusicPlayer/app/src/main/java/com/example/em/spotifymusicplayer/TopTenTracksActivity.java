@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.LoginFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ public class TopTenTracksActivity extends AppCompatActivity {
     public static ArrayList<TopTrackData> topTenTrackList;
     ListView topTenTrackView;
     private ProgressBar spinner;
+    private String TAG = "TopTenTracksActivity";
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -75,6 +78,7 @@ public class TopTenTracksActivity extends AppCompatActivity {
 
         // no data to restore -> run Async
         if (!isRestoringState) {
+            Log.i(TAG, "onCreate: " + "not restoring states");
 
             // get top ten tracks of the artist (async task)
             searchTopTenTrack task = new searchTopTenTrack();
@@ -83,6 +87,7 @@ public class TopTenTracksActivity extends AppCompatActivity {
 
         } else {
             // get saved datasource
+            Log.i(TAG, "onCreate: " + "restoring states");
             topTenTrackList = savedInstanceState.getParcelableArrayList("savedTopTenTrackList");
             bindView();
             spinner.setVisibility(View.GONE);
@@ -135,7 +140,7 @@ public class TopTenTracksActivity extends AppCompatActivity {
 
 
                 // search top 10 tracks of the artist
-                Tracks topTracks = spotify.getArtistTopTrack(artistId[0], "SE");
+                Tracks topTracks = spotify.getArtistTopTrack(artistId[0], "US");
                 topTenTrackList.clear();
                 for (Track track : topTracks.tracks) {
                     TopTrackData currentTrack = new TopTrackData(track);
@@ -158,6 +163,7 @@ public class TopTenTracksActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean isDataSourceRefreshed) {
+            topTenTrackAdapter.notifyDataSetChanged();
 
             String[] artistInfo = TopTenTracksActivity.this.getIntent().getExtras().getStringArray(Intent.EXTRA_TEXT);
             assert artistInfo != null;
