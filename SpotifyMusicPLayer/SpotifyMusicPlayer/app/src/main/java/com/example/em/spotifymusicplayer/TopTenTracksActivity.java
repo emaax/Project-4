@@ -225,6 +225,8 @@ public class TopTenTracksActivity extends AppCompatActivity {
             TextView trackAlbum = (TextView) row.findViewById(R.id.text_view_track_album);
             trackAlbum.setText(getItem(position).trackAlbum);
 
+
+
             return row;
         }
     }

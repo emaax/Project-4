@@ -52,7 +52,7 @@ public class PlayerActivity extends AppCompatActivity implements
     private ImageButton pauseButton;
     private PlayerState state;
     private Player player;
-     String trackUrl;
+    String trackUrl;
 
     private Boolean isPlaying;
     private int songPosition;
@@ -91,8 +91,9 @@ public class PlayerActivity extends AppCompatActivity implements
         buildPlayer();
 
         // Progress Bar to display loading while everything is being set up
-      //  spinner.setVisibility(View.VISIBLE);
+        //  spinner.setVisibility(View.VISIBLE);
     }
+
     private void setViews() {
 
         artistNameView.setText((topTrackData.trackArtist));
@@ -111,32 +112,32 @@ public class PlayerActivity extends AppCompatActivity implements
         nextButton();
 
     }
-       public void buildPlayer () {
-            //start a Spotify player
-            Config playerConfig = new Config(this, accessToken, CLIENT_ID);
-            player = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
-                @Override
-                public void onInitialized(Player p) {
-                    p.addPlayerNotificationCallback(PlayerActivity.this);
-                    p.setPlaybackBitrate(PlaybackBitrate.BITRATE_NORMAL);
-                    prepareMusic();
 
-                    p.getPlayerState(new PlayerStateCallback() {
-                        @Override
-                        public void onPlayerState(PlayerState playerState) {
-                            state = playerState;
-                        }
-                    });
-                    player = p;
-                }
+    public void buildPlayer() {
+        //start a Spotify player
+        Config playerConfig = new Config(this, accessToken, CLIENT_ID);
+        player = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+            @Override
+            public void onInitialized(Player p) {
+                p.addPlayerNotificationCallback(PlayerActivity.this);
+                p.setPlaybackBitrate(PlaybackBitrate.BITRATE_NORMAL);
+                prepareMusic();
 
-                @Override
-                public void onError(Throwable throwable) {
-                    Log.e("PlayerActivity", "Could not initialize player: " + throwable.getMessage());
-                }
-            });
-        }
+                p.getPlayerState(new PlayerStateCallback() {
+                    @Override
+                    public void onPlayerState(PlayerState playerState) {
+                        state = playerState;
+                    }
+                });
+                player = p;
+            }
 
+            @Override
+            public void onError(Throwable throwable) {
+                Log.e("PlayerActivity", "Could not initialize player: " + throwable.getMessage());
+            }
+        });
+    }
 
 
     private void nextButton() {
@@ -150,7 +151,6 @@ public class PlayerActivity extends AppCompatActivity implements
                 }
                 setViews();
                 playButton.setImageResource(R.drawable.ic_skip_next_black_24dp);
-
 
                 prepareMusic();
             }
@@ -256,5 +256,12 @@ public class PlayerActivity extends AppCompatActivity implements
     @Override
     public void onPlaybackError(ErrorType errorType, String s) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        // VERY IMPORTANT! This must always be called or else you will leak resources
+        Spotify.destroyPlayer(this);
+        super.onDestroy();
     }
 }
