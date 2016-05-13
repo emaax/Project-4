@@ -98,7 +98,7 @@ public class PlayerActivity extends AppCompatActivity implements
 
         artistNameView.setText((topTrackData.trackArtist));
         albumNameView.setText((topTrackData.trackAlbum));
-        trackNameView = (TextView) findViewById(R.id.text_view_track_name);
+        trackNameView.setText((topTrackData.trackName));
         currentDuration.setText((topTrackData.trackDuration));
         seekBarView = (SeekBar) findViewById(R.id.seek_bar_seekBar);
         playButton = (ImageButton) findViewById(R.id.image_btn_play);

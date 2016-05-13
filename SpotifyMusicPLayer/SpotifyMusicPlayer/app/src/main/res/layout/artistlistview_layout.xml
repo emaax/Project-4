@@ -2,38 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:orientation="horizontal"
-    android:background="@android:color/black">
-        <RelativeLayout
-            android:layout_width="match_parent"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/relative_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/image_view_artist"
+            android:layout_width="95dp"
+            android:layout_height="80dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/colorPrimary"
+            android:src="@drawable/ic_play_circle_outline_black_24dp" />
+
+        <TextView
+            android:id="@+id/text_view_artist_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/relative_lay">
-
-
-
-
-    <ImageView
-        android:id="@+id/image_view_artist"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/ic_play_circle_filled_black_24dp"
-         />
-
-    <TextView
-        android:layout_toRightOf="@+id/image_view_artist"
-        android:id="@+id/text_view_artist_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        android:textColor="@android:color/white"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:textSize="16dp" />
-        </RelativeLayout>
+            android:layout_alignTop="@+id/image_view_artist"
+            android:layout_toRightOf="@+id/image_view_artist"
+            android:minHeight="?android:attr/listPreferredItemHeight"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" />
+    </RelativeLayout>
 
 </LinearLayout>

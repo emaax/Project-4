@@ -17,7 +17,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="7dp"
-            android:textSize="15sp" />
+            android:textSize="24sp"
+           />
 
         <TextView
             android:id="@+id/text_view_album_name"
@@ -25,29 +26,34 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="3dp"
-            android:textSize="12sp" />
+            android:textSize="18sp"
+           />
+
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="400dp"
             android:layout_gravity="fill_horizontal">
 
             <ImageView
                 android:id="@+id/image_view_track"
                 android:layout_width="match_parent"
                 android:layout_height="375dp"
-                android:layout_gravity="fill_horizontal" />
+                 />
 
-        </RelativeLayout>
+
 
 
         <TextView
             android:id="@+id/text_view_track_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@android:color/black"
-            android:textSize="20sp" />
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:textSize="18sp"
+            android:layout_below="@+id/image_view_track"
+            />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,8 +67,7 @@
                 android:id="@+id/text_view_current_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                 />
+                android:layout_gravity="center_horizontal" />
 
             <SeekBar
                 android:id="@+id/seek_bar_seekBar"
@@ -86,8 +91,7 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/image_btn_prev"
@@ -103,7 +107,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:src="@drawable/ic_play_circle_filled_black_24dp" />
-
 
 
             <ImageButton
