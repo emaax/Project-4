@@ -83,6 +83,7 @@ public class TopTenTracksActivity extends AppCompatActivity {
             // get top ten tracks of the artist (async task)
             searchTopTenTrack task = new searchTopTenTrack();
             assert artistInfo != null;
+            spinner.setVisibility(View.GONE);
             task.execute(artistInfo[0]);
 
         } else {
@@ -167,7 +168,7 @@ public class TopTenTracksActivity extends AppCompatActivity {
 
             String[] artistInfo = TopTenTracksActivity.this.getIntent().getExtras().getStringArray(Intent.EXTRA_TEXT);
             assert artistInfo != null;
-            Toast.makeText(TopTenTracksActivity.this, "No tracks found for \"" + artistInfo[1] + "\"", Toast.LENGTH_LONG).show();
+           // Toast.makeText(TopTenTracksActivity.this, "No tracks found for \"" + artistInfo[1] + "\"", Toast.LENGTH_LONG).show();
 
         }
     }
