@@ -11,6 +11,7 @@ import com.example.em.spotifymusicplayer.SearchArtistActivity;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
+import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
@@ -73,8 +74,25 @@ public class MainActivity extends AppCompatActivity implements
                         Toast.makeText(MainActivity.this, "Could not log in, please restart app!", Toast.LENGTH_SHORT).show();
                         break;
                 }
+                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
+                Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+                    @Override
+                    public void onInitialized(Player player) {
+                        mPlayer = player;
+                        mPlayer.addConnectionStateCallback(MainActivity.this);
+                        mPlayer.addPlayerNotificationCallback(MainActivity.this);
+                        mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
+                    }
+                });
             }
         }
+
+
 
 
         @Override

@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/search_artists_hint"
         android:inputType="text"
+        android:layout_marginTop="20dp"
         android:textColor="@color/primaryTextColor"
         />
 
@@ -23,7 +24,7 @@
         android:id="@+id/list_view_artist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/edit_text_search_artist"
         />
 
     <ProgressBar

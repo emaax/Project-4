@@ -39,19 +39,18 @@ public class SearchArtistActivityFragment extends Fragment {
     private static ArtistAdapter artistAdapter;
     private ArrayList<ArtistListData> artistList;
     ListView artistView;
-    private ProgressBar spinner;
+    private ProgressBar progressBar;
     private SearchForArtistTask task;
 
     public SearchArtistActivityFragment() {
     }
 
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        }
+    }
 
 
     @Override
@@ -76,8 +75,7 @@ public class SearchArtistActivityFragment extends Fragment {
     }
 
     /**
-     *
-     *  RootView used to fill in the rest of the content into the activity screen or fragment.
+     * RootView used to fill in the rest of the content into the activity screen or fragment.
      */
 
     @Override
@@ -86,8 +84,8 @@ public class SearchArtistActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_search_artist, container, false);
 
         // Progress Bar -> initially no progress
-        spinner = (ProgressBar) rootView.findViewById(R.id.progress_bar_1);
-        spinner.setVisibility(View.GONE);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar_1);
+        progressBar.setVisibility(View.GONE);
 
         // Listener for when the user is done typing the artist name in the edittext feild
         searchForArtistEditText = (EditText) rootView.findViewById(R.id.edit_text_search_artist);
@@ -106,22 +104,22 @@ public class SearchArtistActivityFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (searchForArtistEditText.length() != 0) {
 
-                    // show progress bar
-                    spinner.setVisibility(View.VISIBLE);
+                    //Display the progress bar
+                    progressBar.setVisibility(View.VISIBLE);
 
                     if (task != null) {
                         task.cancel(false);
                     }
 
-                    // search for artists
+                    //Search for artist
                     task = new SearchForArtistTask();
                     task.execute("*" + searchForArtistEditText.getText().toString() + "*");
                 } else {
-                    // remove old results on no text
+                    // Removes the old result if there is no text
                     if (task != null) {
                         task.cancel(false);
                     }
-                    spinner.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
                     artistList.clear();
                     artistAdapter.notifyDataSetChanged();
                 }
@@ -172,9 +170,10 @@ public class SearchArtistActivityFragment extends Fragment {
             }
             // for catching network extra exceptions
             try {
-                //  Spotify transaction
+                //  Make the Spotify transaction
                 SpotifyApi api = new SpotifyApi();
-                api.setAccessToken(SearchArtistActivity.getAccessToken());
+                api.setAccessToken(SearchArtistActivity.getAccessToken());  //                api.setAccessToken(SearchArtistActivity.getAccessToken());
+
                 SpotifyService spotify = api.getService();
 
                 // Sets option
@@ -212,15 +211,14 @@ public class SearchArtistActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean isDataSourceRefreshed) {
             if (isDataSourceRefreshed) {
-                spinner.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 artistAdapter.notifyDataSetChanged();
             } else {
-                spinner.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "No results found for \"" + searchForArtistEditText.getText() + "\". Please refine your search.", Toast.LENGTH_LONG).show();
             }
         }
     }
-
 
 
     public class ArtistAdapter extends BaseAdapter {
@@ -254,7 +252,7 @@ public class SearchArtistActivityFragment extends Fragment {
             View row = inflater.inflate(R.layout.artistlistview_layout, viewGroup, false);
 
             // Sets the image for the artist
-           ImageView artistImageView = (ImageView) row.findViewById(R.id.image_view_artist);
+            ImageView artistImageView = (ImageView) row.findViewById(R.id.image_view_artist);
             artistImageView.setImageBitmap(null);
             String url = getItem(position).artistImage;
             Picasso.with(row.getContext()).load(url).placeholder(R.drawable.ic_play_circle_filled_black_24dp).error(R.drawable.ic_pause_circle_outline_black_24dp).into(artistImageView);

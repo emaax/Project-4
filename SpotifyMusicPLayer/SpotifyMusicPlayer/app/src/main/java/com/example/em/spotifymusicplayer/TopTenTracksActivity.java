@@ -3,10 +3,8 @@ package com.example.em.spotifymusicplayer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +19,6 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
@@ -30,7 +26,7 @@ import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.Tracks;
 
 public class TopTenTracksActivity extends AppCompatActivity {
-    public static String[] artistInfo;
+   String[] artistInfo;
     private static TopTenTrackAdapter topTenTrackAdapter;
 
     public static ArrayList<TopTrackData> topTenTrackList;
@@ -52,16 +48,19 @@ public class TopTenTracksActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        initActionbar();
+
+
         setContentView(R.layout.activity_top_ten_tracks);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
         // get Intent2
         artistInfo = getIntent().getStringArrayExtra(Intent.EXTRA_TEXT);
-        Log.d("TopTenTracksActivity", artistInfo[0]);
+
         spinner = (ProgressBar) findViewById(R.id.progress_bar_2);
-        spinner.setVisibility(View.VISIBLE);
-        assert actionBar != null;
-        actionBar.setSubtitle(artistInfo[1]);
+       // spinner.setVisibility(View.VISIBLE);
+       // assert actionBar != null;
+        //actionBar.setSubtitle(artistInfo[1]);
         topTenTrackList = new ArrayList<>();
         topTenTrackView = (ListView) findViewById(R.id.topTenTrackListView);
         bindView();
@@ -78,7 +77,7 @@ public class TopTenTracksActivity extends AppCompatActivity {
         if (!isRestoringState) {
 
             // get top ten tracks of the artist (async task)
-            FetchTopTenTrack task = new FetchTopTenTrack();
+            searchTopTenTrack task = new searchTopTenTrack();
             assert artistInfo != null;
             task.execute(artistInfo[0]);
 
@@ -101,13 +100,23 @@ public class TopTenTracksActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *  Instanciates the actionbars and set the subtitle to match the artist info
+
+     */
+    private void initActionbar() {
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setSubtitle(artistInfo[1]);
+    }
+
     private void bindView() {
         topTenTrackAdapter = new TopTenTrackAdapter(TopTenTracksActivity.this, topTenTrackList);
         topTenTrackView.setAdapter(topTenTrackAdapter);
     }
 
 
-    public class FetchTopTenTrack extends AsyncTask<String, Void, Boolean> {
+    public class searchTopTenTrack extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -126,7 +135,7 @@ public class TopTenTracksActivity extends AppCompatActivity {
 
 
                 // search top 10 tracks of the artist
-                Tracks topTracks = spotify.getArtistTopTrack(artistId[0], "US");
+                Tracks topTracks = spotify.getArtistTopTrack(artistId[0], "SE");
                 topTenTrackList.clear();
                 for (Track track : topTracks.tracks) {
                     TopTrackData currentTrack = new TopTrackData(track);
