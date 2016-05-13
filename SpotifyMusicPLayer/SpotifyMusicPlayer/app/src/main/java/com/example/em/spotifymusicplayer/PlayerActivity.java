@@ -86,7 +86,7 @@ public class PlayerActivity extends AppCompatActivity implements
         playButton = (ImageButton) findViewById(R.id.image_btn_play);
         prevButton = (ImageButton) findViewById(R.id.image_btn_prev);
         nextButton = (ImageButton) findViewById(R.id.image_btn_next);
-        pauseButton = (ImageButton) findViewById(R.id.image_btn_pause);
+       // pauseButton = (ImageButton) findViewById(R.id.image_btn_pause);
         setViews();
         buildPlayer();
 
@@ -104,7 +104,7 @@ public class PlayerActivity extends AppCompatActivity implements
         playButton = (ImageButton) findViewById(R.id.image_btn_play);
         prevButton = (ImageButton) findViewById(R.id.image_btn_prev);
         nextButton = (ImageButton) findViewById(R.id.image_btn_next);
-        pauseButton = (ImageButton) findViewById(R.id.image_btn_pause);
+     //   pauseButton = (ImageButton) findViewById(R.id.image_btn_pause);
         imageUrl = topTrackData.trackImageLarge;
         Log.i("PlayerActivity", "setViews: " + imageUrl);
         Picasso.with(this).load(Uri.parse(imageUrl)).into(trackImageView);
@@ -141,16 +141,18 @@ public class PlayerActivity extends AppCompatActivity implements
 
 
     private void nextButton() {
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        nextButton.setOnClickListener(  new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 spinner.setVisibility(View.VISIBLE);
                 songPosition = songPosition + 1;
                 if (songPosition > TopTenTracksActivity.topTenTrackList.size() - 1) {
                     songPosition = 0;
+
                 }
                 setViews();
-                playButton.setImageResource(R.drawable.ic_skip_next_black_24dp);
+               // nextButton.setImageResource(R.drawable.ic_skip_next_black_24dp);
+
 
                 prepareMusic();
             }
@@ -163,7 +165,7 @@ public class PlayerActivity extends AppCompatActivity implements
 
         // disable until prepared
         playButton.setClickable(true);
-        playButton.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
+        playButton.setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
         // get track
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,7 +173,9 @@ public class PlayerActivity extends AppCompatActivity implements
                 if (!isPlaying) {
                     player.play(topTrackData.trackUrl);
                     player.resume();
+
                     isPlaying = true;
+                    playButton.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
 
                     player.getPlayerState(new PlayerStateCallback() {
                         @Override
@@ -205,7 +209,7 @@ public class PlayerActivity extends AppCompatActivity implements
                 } else {
                     player.pause();
                     isPlaying = false;
-                    playButton.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
+                    playButton.setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
 
 
                     Intent intent = new Intent();

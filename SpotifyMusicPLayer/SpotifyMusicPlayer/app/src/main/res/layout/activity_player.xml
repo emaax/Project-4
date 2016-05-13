@@ -36,10 +36,7 @@
                 android:id="@+id/image_view_track"
                 android:layout_width="match_parent"
                 android:layout_height="375dp"
-                android:layout_gravity="fill_horizontal"
-
-                />
-
+                android:layout_gravity="fill_horizontal" />
 
         </RelativeLayout>
 
@@ -49,13 +46,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/colorAccent"
+            android:textColor="@android:color/black"
             android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -64,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="10sp" />
+                 />
 
             <SeekBar
                 android:id="@+id/seek_bar_seekBar"
@@ -73,6 +71,7 @@
                 android:layout_gravity="center_horizontal" />
 
             <TextView
+
                 android:id="@+id/text_view_final_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,14 +86,15 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <ImageButton
                 android:id="@+id/image_btn_prev"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_weight="4"
+                android:layout_weight="2"
                 android:src="@drawable/ic_skip_previous_black_24dp" />
 
             <ImageButton
@@ -104,30 +104,25 @@
                 android:layout_weight="4"
                 android:src="@drawable/ic_play_circle_filled_black_24dp" />
 
-            <ImageButton
-                android:id="@+id/image_btn_pause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:src="@drawable/ic_pause_circle_outline_black_24dp" />
+
 
             <ImageButton
                 android:id="@+id/image_btn_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="2"
                 android:src="@drawable/ic_skip_next_black_24dp" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <ProgressBar
+    <!--<ProgressBar
         android:id="@+id/progress_bar_3"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true" />-->
 
 
 </RelativeLayout>
