@@ -4,7 +4,12 @@
     android:layout_height="match_parent"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="horizontal"
-    android:background="@color/colorAccent">
+    android:background="@android:color/black">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/relative_lay">
+
 
 
 
@@ -15,17 +20,20 @@
         android:layout_marginBottom="5dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
+        android:layout_alignParentTop="true"
         android:src="@drawable/ic_play_circle_filled_black_24dp"
          />
 
     <TextView
+        android:layout_toRightOf="@+id/image_view_artist"
         android:id="@+id/text_view_artist_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:gravity="center_vertical"
-        android:textColor="@android:color/holo_blue_dark"
+        android:textColor="@android:color/white"
         android:minHeight="?android:attr/listPreferredItemHeight"
         android:textSize="16dp" />
+        </RelativeLayout>
 
 </LinearLayout>
