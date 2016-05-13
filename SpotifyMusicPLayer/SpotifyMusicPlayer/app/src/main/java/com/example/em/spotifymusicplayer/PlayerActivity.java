@@ -1,11 +1,14 @@
 package com.example.em.spotifymusicplayer;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -14,8 +17,10 @@ import android.widget.TextView;
 
 import com.example.em.spotifymusicplayer.Activity.MainActivity;
 import com.spotify.sdk.android.player.Player;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
-public class PlayerActivity extends  AppCompatActivity {
+public class PlayerActivity extends AppCompatActivity {
 
 
     private android.support.v7.app.ActionBar actionBar;
@@ -40,11 +45,11 @@ public class PlayerActivity extends  AppCompatActivity {
 
 
     TopTrackData topTrackData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        topTrackData =   (TopTrackData) getIntent().getParcelableExtra(Intent.EXTRA_TEXT);
-
+        topTrackData = (TopTrackData) getIntent().getParcelableExtra(Intent.EXTRA_TEXT);
 
 
         // set title in the actionbar
@@ -75,8 +80,7 @@ public class PlayerActivity extends  AppCompatActivity {
     private void setViews() {
 
         artistNameView.setText((topTrackData.trackArtist));
-        albumNameView. setText((topTrackData.trackAlbum));
-        trackImageView.setImageBitmap((topTrackData.trackImageLarge);
+        albumNameView.setText((topTrackData.trackAlbum));
         trackNameView = (TextView) findViewById(R.id.text_view_track_name);
         currentDuration.setText((topTrackData.trackDuration));
         seekBarView = (SeekBar) findViewById(R.id.seek_bar_seekBar);
@@ -84,7 +88,8 @@ public class PlayerActivity extends  AppCompatActivity {
         prevButton = (ImageButton) findViewById(R.id.image_btn_prev);
         nextButton = (ImageButton) findViewById(R.id.image_btn_next);
         pauseButton = (ImageButton) findViewById(R.id.image_btn_pause);
-
+        imageUrl = TopTenTracksActivity.topTenTrackList.get(songPosition).trackImageLarge;
+        trackImageView.setImageURI(Uri.parse(imageUrl));
 
     }
 }
