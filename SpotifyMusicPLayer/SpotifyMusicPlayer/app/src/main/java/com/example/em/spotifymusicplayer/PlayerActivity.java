@@ -31,8 +31,8 @@ import com.squareup.picasso.Target;
 
 public class PlayerActivity extends AppCompatActivity implements
         PlayerNotificationCallback {
-    protected static final String CLIENT_ID = "7af8a0889cc34a35b18838154e84c0b4";
-    private static final String REDIRECT_URI = "spotifystreamer://callback";
+    protected static final String CLIENT_ID = "1b83b9968c1e468bb7e72686a240f94c";
+    private static final String REDIRECT_URI = "emaax-android-app-login://callback";
     private static String accessToken;
     private static final int REQUEST_CODE = 1337;
 
@@ -162,10 +162,6 @@ public class PlayerActivity extends AppCompatActivity implements
         // get track
         final String trackUrl = TopTenTracksActivity.topTenTrackList.get(songPosition).trackUrl;
 
-
-        // initially not playing
-
-
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,7 +182,7 @@ public class PlayerActivity extends AppCompatActivity implements
                             bundle.putString("track", TopTenTracksActivity.topTenTrackList.get(songPosition).trackName);
                             bundle.putString("artist", TopTenTracksActivity.topTenTrackList.get(songPosition).trackArtist);
                             bundle.putString("album", TopTenTracksActivity.topTenTrackList.get(songPosition).trackAlbum);
-                            bundle.put
+                            bundle.putString("track url", TopTenTracksActivity.topTenTrackList.get(songPosition).trackUrl);
 
                             // put the song's total duration (in ms)
                             bundle.putLong("duration", Integer.parseInt(TopTenTracksActivity.topTenTrackList.get(songPosition).trackDuration));
@@ -208,7 +204,7 @@ public class PlayerActivity extends AppCompatActivity implements
                     isPlaying = false;
                     playButton.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
 
-                   
+
                     Intent intent = new Intent();
                     Bundle bundle = new Bundle();
 

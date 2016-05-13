@@ -31,34 +31,7 @@ public class SearchArtistActivity extends AppCompatActivity implements SharedPre
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-       /* // register prefernce change listener
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        pref.registerOnSharedPreferenceChangeListener(this);
-
-        final AuthenticationRequest request = new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI)
-                .setScopes(new String[]{"user-read-private", "playlist-read", "playlist-read-private", "streaming"})
-                .build();
-
-        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request)*/;
-
-        // check premium or free user
-        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String userType = prefs.getString(getString(R.string.user_type_key),
-                getString(R.string.user_type_key));
-        if (userType.equals("free")) {
-            AuthenticationClient.logout(getApplicationContext());
-        } else {
-            AuthenticationRequest.Builder builder =
-                    new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
-            builder.setScopes(new String[]{"user-read-private", "playlist-read", "playlist-read-private", "streaming"});
-            AuthenticationRequest request = builder.build();
-
-            AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);*/
-
-
         setContentView(R.layout.activity_search_artist);
-
     }
 
     @Override
@@ -76,7 +49,6 @@ public class SearchArtistActivity extends AppCompatActivity implements SharedPre
                     setAccessToken(response.getAccessToken());
                     Intent intent1 = new Intent(SearchArtistActivity.this, TopTenTracksActivity.class);
                     startActivity(intent1);
-
                     break;
 
                 case ERROR:
@@ -97,14 +69,13 @@ public class SearchArtistActivity extends AppCompatActivity implements SharedPre
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-
-            Intent intent = new Intent(this, TopTenTracksActivity.class);
-            startActivity(intent);
-
+        Intent intent = new Intent(this, TopTenTracksActivity.class);
+        startActivity(intent);
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-    }}
+    }
+}
