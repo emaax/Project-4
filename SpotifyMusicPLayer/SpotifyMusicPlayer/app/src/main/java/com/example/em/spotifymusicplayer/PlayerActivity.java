@@ -52,6 +52,7 @@ public class PlayerActivity extends AppCompatActivity implements
     private ImageButton pauseButton;
     private PlayerState state;
     private Player player;
+     String trackUrl;
 
     private Boolean isPlaying;
     private int songPosition;
@@ -74,7 +75,7 @@ public class PlayerActivity extends AppCompatActivity implements
         actionBar.setSubtitle((topTrackData).trackAlbum);
 
         setContentView(R.layout.activity_player);
-        buildPlayer();
+      /*  buildPlayer();*/
 
         artistNameView = (TextView) findViewById(R.id.text_view_artist_name);
         albumNameView = (TextView) findViewById(R.id.text_view_album_name);
@@ -90,7 +91,7 @@ public class PlayerActivity extends AppCompatActivity implements
         setViews();
 
         // Progress Bar to display loading while everything is being set up
-        spinner.setVisibility(View.VISIBLE);
+      //  spinner.setVisibility(View.VISIBLE);
     }
     private void setViews() {
 
@@ -105,11 +106,12 @@ public class PlayerActivity extends AppCompatActivity implements
         pauseButton = (ImageButton) findViewById(R.id.image_btn_pause);
         imageUrl = TopTenTracksActivity.topTenTrackList.get(songPosition).trackImageLarge;
         trackImageView.setImageURI(Uri.parse(imageUrl));
+        trackUrl= TopTenTracksActivity.topTenTrackList.get(songPosition).trackUrl;
         prevButton();
         nextButton();
 
     }
-        public void buildPlayer () {
+       /* public void buildPlayer () {
             //start a Spotify player
             Config playerConfig = new Config(this, accessToken, CLIENT_ID);
             player = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
@@ -133,7 +135,7 @@ public class PlayerActivity extends AppCompatActivity implements
         }
 
 
-
+*/
     private void nextButton() {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override

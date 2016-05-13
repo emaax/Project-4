@@ -49,7 +49,7 @@ public class TopTenTracksActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        initActionbar();
+      /*  initActionbar();*/
 
 
         setContentView(R.layout.activity_top_ten_tracks);
@@ -104,11 +104,11 @@ public class TopTenTracksActivity extends AppCompatActivity {
      *  Instanciates the actionbars and set the subtitle to match the artist info
 
      */
-    private void initActionbar() {
+ /*   private void initActionbar() {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setSubtitle(artistInfo[1]);
-    }
+    }*/
 
     private void bindView() {
         topTenTrackAdapter = new TopTenTrackAdapter(TopTenTracksActivity.this, topTenTrackList);
