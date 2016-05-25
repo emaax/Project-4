@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.LoginFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -28,7 +26,7 @@ import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.Tracks;
 
 public class TopTenTracksActivity extends AppCompatActivity {
-   String[] artistInfo;
+    String[] artistInfo;
     private static TopTenTrackAdapter topTenTrackAdapter;
 
     public static ArrayList<TopTrackData> topTenTrackList;
@@ -39,58 +37,39 @@ public class TopTenTracksActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        // save data source
+        // Save data source
         if (topTenTrackList != null) {
             outState.putParcelableArrayList("savedTopTenTrackList", topTenTrackList);
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-      /*  initActionbar();*/
-
-
         setContentView(R.layout.activity_top_ten_tracks);
 
         // get Intent2
         artistInfo = getIntent().getStringArrayExtra(Intent.EXTRA_TEXT);
-
         spinner = (ProgressBar) findViewById(R.id.progress_bar_2);
-       // spinner.setVisibility(View.VISIBLE);
-       // assert actionBar != null;
-        //actionBar.setSubtitle(artistInfo[1]);
         topTenTrackList = new ArrayList<>();
         topTenTrackView = (ListView) findViewById(R.id.topTenTrackListView);
-        bindView();
+        setViews();
 
-        // set subtitle in the actionbar
-
-
-
-
-        // else datasource has been parcelled and can be reused ->true
         Boolean isRestoringState = savedInstanceState != null;
-
-        // no data to restore -> run Async
+        // Run Async if no data to restore
         if (!isRestoringState) {
             Log.i(TAG, "onCreate: " + "not restoring states");
 
-            // get top ten tracks of the artist (async task)
-            searchTopTenTrack task = new searchTopTenTrack();
+            // Get top ten tracks of the artist (async task)
+            getArtistTopTenTracks task = new getArtistTopTenTracks();
             assert artistInfo != null;
             spinner.setVisibility(View.GONE);
             task.execute(artistInfo[0]);
 
         } else {
-            // get saved datasource
-            Log.i(TAG, "onCreate: " + "restoring states");
+            // Get saved data source
             topTenTrackList = savedInstanceState.getParcelableArrayList("savedTopTenTrackList");
-            bindView();
+            setViews();
             spinner.setVisibility(View.GONE);
         }
         // TODO implement listener to start PlayMusicActivity
@@ -98,31 +77,20 @@ public class TopTenTracksActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // start Player Activity
-                TopTrackData trackPosition =topTenTrackList.get(position);
+                TopTrackData trackPosition = topTenTrackList.get(position);
                 Intent intent = new Intent(TopTenTracksActivity.this, PlayerActivity.class).putExtra(Intent.EXTRA_TEXT, trackPosition);
                 startActivity(intent);
             }
         });
-
     }
 
-    /**
-     *  Instanciates the actionbars and set the subtitle to match the artist info
-
-     */
- /*   private void initActionbar() {
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setSubtitle(artistInfo[1]);
-    }*/
-
-    private void bindView() {
+    private void setViews() {
         topTenTrackAdapter = new TopTenTrackAdapter(TopTenTracksActivity.this, topTenTrackList);
         topTenTrackView.setAdapter(topTenTrackAdapter);
     }
 
 
-    public class searchTopTenTrack extends AsyncTask<String, Void, Boolean> {
+    public class getArtistTopTenTracks extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -131,17 +99,15 @@ public class TopTenTracksActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(String... artistId) {
-
-            // for catching network extra exceptions
+            // Network exception
             try {
-                // do spotify transaction
+                // Get spotify service
                 SpotifyApi api = new SpotifyApi();
                 api.setAccessToken(SearchArtistActivity.getAccessToken());
                 SpotifyService spotify = api.getService();
 
-
-                // search top 10 tracks of the artist
-                Tracks topTracks = spotify.getArtistTopTrack(artistId[0], "US");
+                // Get top 10 tracks of the artist
+                Tracks topTracks = spotify.getArtistTopTrack(artistId[0], "SE");
                 topTenTrackList.clear();
                 for (Track track : topTracks.tracks) {
                     TopTrackData currentTrack = new TopTrackData(track);
@@ -149,12 +115,11 @@ public class TopTenTracksActivity extends AppCompatActivity {
                     topTenTrackList.add(currentTrack);
                 }
 
-                // return true if data source refreshed
+                // If data source is refreshed, return true
                 return !topTenTrackList.isEmpty();
             } catch (Exception e) {
                 return false;
             }
-
         }
 
         @Override
@@ -164,21 +129,17 @@ public class TopTenTracksActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean isDataSourceRefreshed) {
+
             topTenTrackAdapter.notifyDataSetChanged();
-
-            String[] artistInfo = TopTenTracksActivity.this.getIntent().getExtras().getStringArray(Intent.EXTRA_TEXT);
+            String[] artistInfo = getIntent().getExtras().getStringArray(Intent.EXTRA_TEXT);
             assert artistInfo != null;
-           // Toast.makeText(TopTenTracksActivity.this, "No tracks found for \"" + artistInfo[1] + "\"", Toast.LENGTH_LONG).show();
-
         }
     }
 
-
-    // custom adapter
+    // Adapter - custom
     public class TopTenTrackAdapter extends BaseAdapter {
         ArrayList topTenTrackList = new ArrayList();
         Context context;
-
 
         public TopTenTrackAdapter(Context context, ArrayList topTenTrackList) {
             this.topTenTrackList = topTenTrackList;
@@ -200,34 +161,25 @@ public class TopTenTracksActivity extends AppCompatActivity {
             return position;
         }
 
-        /**
-         *
-         *
-         */
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View row = inflater.inflate(R.layout.toptentracklistview_layout, viewGroup, false);
+            View view = inflater.inflate(R.layout.toptentracklistview_layout, viewGroup, false);
 
-
-
-            // put track image
-            ImageView trackImageView = (ImageView) row.findViewById(R.id.image_view_track);
+            //Track image
+            ImageView trackImageView = (ImageView) view.findViewById(R.id.image_view_track);
             trackImageView.setImageBitmap(null);
             String url = getItem(position).trackImageSmall;
-            Picasso.with(row.getContext()).load(url).placeholder(R.drawable.ic_play_circle_filled_black_24dp).error(R.drawable.ic_pause_circle_outline_black_24dp).into(trackImageView);
-
-            // put track name
-            TextView trackName = (TextView) row.findViewById(R.id.text_view_track_name);
+            Picasso.with(view.getContext()).load(url).placeholder(R.drawable.ic_play_circle_filled_black_24dp).error(R.drawable.ic_pause_circle_outline_black_24dp).into(trackImageView);
+            //Track name
+            TextView trackName = (TextView) view.findViewById(R.id.text_view_track_name);
             trackName.setText(getItem(position).trackName);
 
-            // put track album
-            TextView trackAlbum = (TextView) row.findViewById(R.id.text_view_track_album);
+            // Track album
+            TextView trackAlbum = (TextView) view.findViewById(R.id.text_view_track_album);
             trackAlbum.setText(getItem(position).trackAlbum);
 
-
-
-            return row;
+            return view;
         }
     }
 }

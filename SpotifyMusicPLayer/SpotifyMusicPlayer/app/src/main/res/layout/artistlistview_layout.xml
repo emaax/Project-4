@@ -21,7 +21,8 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
             android:background="@color/colorPrimary"
-            android:src="@drawable/ic_play_circle_outline_black_24dp" />
+            android:src="@drawable/ic_library_music_black_24dp"
+            />
 
         <TextView
             android:id="@+id/text_view_artist_name"

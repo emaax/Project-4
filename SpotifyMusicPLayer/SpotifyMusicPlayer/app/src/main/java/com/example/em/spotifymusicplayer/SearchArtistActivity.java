@@ -68,7 +68,6 @@ public class SearchArtistActivity extends AppCompatActivity implements SharedPre
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         Intent intent = new Intent(this, TopTenTracksActivity.class);
         startActivity(intent);
 
