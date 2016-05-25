@@ -1,24 +1,18 @@
 package com.example.em.spotifymusicplayer;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.annotation.MainThread;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.em.spotifymusicplayer.Activity.MainActivity;
-import com.spotify.sdk.android.authentication.AuthenticationClient;
-import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.PlaybackBitrate;
 import com.spotify.sdk.android.player.Player;
@@ -27,7 +21,6 @@ import com.spotify.sdk.android.player.PlayerState;
 import com.spotify.sdk.android.player.PlayerStateCallback;
 import com.spotify.sdk.android.player.Spotify;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 public class PlayerActivity extends AppCompatActivity implements
         PlayerNotificationCallback {
@@ -53,7 +46,7 @@ public class PlayerActivity extends AppCompatActivity implements
     private PlayerState state;
     private Player player;
     String trackUrl;
-
+    private Handler seekHandler = new Handler();
     private Boolean isPlaying;
     private int songPosition;
     String imageUrl;
@@ -67,15 +60,19 @@ public class PlayerActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         topTrackData = (TopTrackData) getIntent().getParcelableExtra(Intent.EXTRA_TEXT);
 
-
-        // set title in the actionbar
         actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle((topTrackData).trackName);
-        actionBar.setSubtitle((topTrackData).trackAlbum);
+        actionBar.setSubtitle((topTrackData).trackArtist);
 
         setContentView(R.layout.activity_player);
+        initViews();
+        setViews();
+        buildPlayer();
 
+    }
+
+    private void initViews() {
         artistNameView = (TextView) findViewById(R.id.text_view_artist_name);
         albumNameView = (TextView) findViewById(R.id.text_view_album_name);
         trackImageView = (ImageView) findViewById(R.id.image_view_track);
@@ -86,12 +83,6 @@ public class PlayerActivity extends AppCompatActivity implements
         playButton = (ImageButton) findViewById(R.id.image_btn_play);
         prevButton = (ImageButton) findViewById(R.id.image_btn_prev);
         nextButton = (ImageButton) findViewById(R.id.image_btn_next);
-       // pauseButton = (ImageButton) findViewById(R.id.image_btn_pause);
-        setViews();
-        buildPlayer();
-
-        // Progress Bar to display loading while everything is being set up
-        //  spinner.setVisibility(View.VISIBLE);
     }
 
     private void setViews() {
@@ -100,25 +91,23 @@ public class PlayerActivity extends AppCompatActivity implements
         albumNameView.setText((topTrackData.trackAlbum));
         trackNameView.setText((topTrackData.trackName));
         currentDuration.setText((topTrackData.trackDuration));
-        seekBarView = (SeekBar) findViewById(R.id.seek_bar_seekBar);
-        playButton = (ImageButton) findViewById(R.id.image_btn_play);
-        prevButton = (ImageButton) findViewById(R.id.image_btn_prev);
-        nextButton = (ImageButton) findViewById(R.id.image_btn_next);
-     //   pauseButton = (ImageButton) findViewById(R.id.image_btn_pause);
+
         imageUrl = topTrackData.trackImageLarge;
         Log.i("PlayerActivity", "setViews: " + imageUrl);
         Picasso.with(this).load(Uri.parse(imageUrl)).into(trackImageView);
+
         prevButton();
         nextButton();
 
     }
 
     public void buildPlayer() {
-        //start a Spotify player
+        //Configure the Spotify Player
         Config playerConfig = new Config(this, accessToken, CLIENT_ID);
-        player = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+        player = Spotify.getPlayer(playerConfig, MainActivity.class, new Player.InitializationObserver() {
             @Override
             public void onInitialized(Player p) {
+
                 p.addPlayerNotificationCallback(PlayerActivity.this);
                 p.setPlaybackBitrate(PlaybackBitrate.BITRATE_NORMAL);
                 prepareMusic();
@@ -130,6 +119,8 @@ public class PlayerActivity extends AppCompatActivity implements
                     }
                 });
                 player = p;
+                setSeekBar();
+
             }
 
             @Override
@@ -139,34 +130,37 @@ public class PlayerActivity extends AppCompatActivity implements
         });
     }
 
-
-    private void nextButton() {
-        nextButton.setOnClickListener(  new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                spinner.setVisibility(View.VISIBLE);
-                songPosition = songPosition + 1;
-                if (songPosition > TopTenTracksActivity.topTenTrackList.size() - 1) {
-                    songPosition = 0;
-
+    private void setSeekBar() {
+        if (player != null) {
+            player.getPlayerState(new PlayerStateCallback() {
+                @Override
+                public void onPlayerState(PlayerState playerState) {
+                    seekBarView.setProgress(playerState.positionInMs);
+                    int seconds = ((playerState.positionInMs / 1000) % 60);
+                    int minutes = ((playerState.positionInMs / 1000) / 60);
+                    if (seconds < 10) {
+                        currentDuration.setText(String.valueOf(minutes) + ":0" + String.valueOf(seconds));
+                    } else {
+                        currentDuration.setText(String.valueOf(minutes) + ":" + String.valueOf(seconds));
+                    }
                 }
-                setViews();
-               // nextButton.setImageResource(R.drawable.ic_skip_next_black_24dp);
-
-
-                prepareMusic();
-            }
-        });
+            });
+        }
+        seekHandler.postDelayed(run, 1000);
     }
+    Runnable run = new Runnable() {
+        @Override
+        public void run() {
+            setSeekBar();
+        }
+    };
 
     private void prepareMusic() {
 
         isPlaying = false;
 
-        // disable until prepared
         playButton.setClickable(true);
-        playButton.setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
-        // get track
+        playButton.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,7 +169,7 @@ public class PlayerActivity extends AppCompatActivity implements
                     player.resume();
 
                     isPlaying = true;
-                    playButton.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
+                    playButton.setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
 
                     player.getPlayerState(new PlayerStateCallback() {
                         @Override
@@ -184,22 +178,20 @@ public class PlayerActivity extends AppCompatActivity implements
 
                             Intent intent = new Intent();
                             Bundle bundle = new Bundle();
-
-                            // put the song's metadata
+                            // metadata of the song
                             bundle.putString("track", TopTenTracksActivity.topTenTrackList.get(songPosition).trackName);
                             bundle.putString("artist", TopTenTracksActivity.topTenTrackList.get(songPosition).trackArtist);
                             bundle.putString("album", TopTenTracksActivity.topTenTrackList.get(songPosition).trackAlbum);
                             bundle.putString("track url", TopTenTracksActivity.topTenTrackList.get(songPosition).trackUrl);
 
-                            // put the song's total duration (in ms)
+                            // Get the song's total duration (in ms)
                             bundle.putLong("duration", Integer.parseInt(TopTenTracksActivity.topTenTrackList.get(songPosition).trackDuration));
 
-                            // put the song's current position
+                            // current position of the song
                             bundle.putLong("position", progress);
 
-                            // put the playback status
+                            // playback status
                             bundle.putBoolean("playing", true);
-
 
                             intent.putExtras(bundle);
                             getIntent().getParcelableExtra(Intent.EXTRA_TEXT);
@@ -207,23 +199,25 @@ public class PlayerActivity extends AppCompatActivity implements
                     });
 
                 } else {
+
                     player.pause();
                     isPlaying = false;
-                    playButton.setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
+                    playButton.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
 
 
                     Intent intent = new Intent();
                     Bundle bundle = new Bundle();
 
-                    // put the song's metadata
+                    // metadata of the song
                     bundle.putString("track", TopTenTracksActivity.topTenTrackList.get(songPosition).trackName);
                     bundle.putString("artist", TopTenTracksActivity.topTenTrackList.get(songPosition).trackArtist);
                     bundle.putString("album", TopTenTracksActivity.topTenTrackList.get(songPosition).trackAlbum);
 
-                    // put the song's total duration (in ms)
+                    // Get the song's total duration (in ms)
                     bundle.putLong("duration", Integer.parseInt(TopTenTracksActivity.topTenTrackList.get(songPosition).trackDuration)); // 4:05
 
-                    // put the playback status
+                    bundle.putLong("position", 0L);
+                    // playback status
                     bundle.putBoolean("playing", false);
 
                     intent.putExtras(bundle);
@@ -232,13 +226,36 @@ public class PlayerActivity extends AppCompatActivity implements
                 }
             }
         });
+
+        currentDuration.setText("00:00");
+
+
+
+    }
+
+    private void nextButton() {
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                songPosition = songPosition + 1;
+                if (songPosition > TopTenTracksActivity.topTenTrackList.size() - 1) {
+                    songPosition = 0;
+
+                }
+                setViews();
+                nextButton.setImageResource(R.drawable.ic_skip_next_black_24dp);
+
+
+                prepareMusic();
+            }
+        });
     }
 
     private void prevButton() {
+        prevButton.setClickable(true);
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                spinner.setVisibility(View.VISIBLE);
                 songPosition = songPosition - 1;
                 if (songPosition < 0) {
                     songPosition = 0;
@@ -248,6 +265,7 @@ public class PlayerActivity extends AppCompatActivity implements
 
                 prepareMusic();
             }
+
         });
     }
 

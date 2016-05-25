@@ -1,4 +1,4 @@
-package com.example.em.spotifymusicplayer.Activity;
+package com.example.em.spotifymusicplayer;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.em.spotifymusicplayer.R;
-import com.example.em.spotifymusicplayer.SearchArtistActivity;
-import com.example.em.spotifymusicplayer.TopTrackData;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
@@ -53,11 +50,9 @@ public class MainActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-
         // Check if result comes from the correct activity
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
-
 
             switch (response.getType()) {
 
@@ -91,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements
             });
         }
     }
-
 
     @Override
     public void onLoggedIn() {

@@ -8,7 +8,7 @@ import kaaes.spotify.webapi.android.models.Image;
 
 /**
  * Created by emiliaaxen on 16-05-11.
- * This class is responsible for
+ *
  */
 public class ArtistListData implements Parcelable {
     String artistName;
@@ -25,29 +25,27 @@ public class ArtistListData implements Parcelable {
             }
         }
     }
-
-
-    private ArtistListData(Parcel parcel) {
-        artistName = parcel.readString();
-        artistId = parcel.readString();
-        artistImage = parcel.readString();
+    public ArtistListData(Parcel in) {
+        ReadFromParcel(in);
     }
 
-    /* private void ReadFromParcel(Parcel in) {
+
+
+     private void ReadFromParcel(Parcel in) {
          artistName = in.readString();
          artistId = in.readString();
          artistImage = in.readString();
-     }*/
+     }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(artistName);
+        out.writeString(artistId);
+        out.writeString(artistImage);
+    }
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeString(artistName);
-        parcel.writeString(artistId);
-        parcel.writeString(artistImage);
     }
 
 
